@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -8,11 +8,24 @@ import SuperInput from '../../global/SuperInput'
 import { Link } from 'react-router-dom'
 import CartContext from '../../../contex/CartContext'
 import { useContext } from 'react'
+import Coupon from './Coupon'
 import type { LocalCart, Pricing } from '../../../utilities/types'
+import useFetch from '../../../hooks/useFetch'
 
 const tips = ['10%', '15%', '20%', '25%', '_$', '_%']
 
 function Order() {
+	const coupon = useFetch(
+		'https://dynebackend.herokuapp.com/dev/api/coupon/getAll?limit=5'
+	)
+
+	const [couponVisible, setCouponVisible] = useState<Boolean>(false)
+	const toggleCouponVisible = () => setCouponVisible((v: Boolean) => !v)
+	const [couponIndex, setCouponIndex] = useState<Boolean | number>(false)
+	const handleCouponIndex = (index: number) => {
+		setCouponIndex(index)
+	}
+
 	const getCarts = useContext(CartContext)
 	const [carts, setCarts] = React.useState<LocalCart[]>(getCarts.cart)
 	const quantityHandle = (
@@ -76,6 +89,13 @@ function Order() {
 
 	return (
 		<Box sx={{ px: 1 }}>
+			<Coupon
+				visible={couponVisible}
+				toggleCouponVisible={toggleCouponVisible}
+				handleCouponIndex={handleCouponIndex}
+				couponIndex={couponIndex}
+				coupon={coupon}
+			/>
 			<Box>
 				<Typography
 					color="text.primary"
@@ -224,6 +244,7 @@ function Order() {
 
 				<Box sx={{ mt: 2 }}>
 					<Button
+						onClick={toggleCouponVisible}
 						fullWidth
 						variant="contained"
 						color="primary"
