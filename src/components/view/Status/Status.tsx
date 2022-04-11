@@ -104,7 +104,10 @@ function Status() {
 						lineHeight="120px"
 						color="primary"
 					>
-						<Countdown date={Date.now() + 500000} renderer={rendererTime} />
+						<Countdown
+							date={Date.now() + 1000000}
+							renderer={rendererTime}
+						/>
 					</Typography>
 					<Typography
 						component="p"
@@ -134,8 +137,8 @@ function Status() {
 				>
 					View Order Summary
 				</Button>
-				<Link
-					to="/"
+				<a
+					href="/"
 					style={{
 						textDecoration: 'none',
 						color: '#007AFF',
@@ -160,7 +163,7 @@ function Status() {
 					>
 						Done
 					</Button>
-				</Link>
+				</a>
 			</Box>
 		</Box>
 	)

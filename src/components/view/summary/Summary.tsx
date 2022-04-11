@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
@@ -8,8 +9,9 @@ import mastercard from '../../../images/mastercard.png'
 import visa from '../../../images/visa.png'
 import more_horiz from '../../../images/more_horiz.png'
 import IconButton from '@mui/material/IconButton'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import type { LocalCart, Pricing } from '../../../utilities/types'
+import useFetchPost from '../../../hooks/useFetchPost'
 
 const cards = [
 	{
@@ -27,10 +29,13 @@ const cards = [
 ]
 
 function Summary() {
+	const usefetchpost = useFetchPost()
 	const location = useLocation()
+	const navigate = useNavigate()
 	const getState = location.state as {
 		carts: LocalCart[]
 		pricing: Pricing
+		couponId: string
 	}
 	const listOfPricing = [
 		{
@@ -41,7 +46,7 @@ function Summary() {
 		{
 			id: 498,
 			key: 'Discount',
-			value: `$${getState.pricing.discount}`,
+			value: `$${getState?.pricing?.discount}`,
 		},
 		{
 			id: 786,
@@ -51,16 +56,46 @@ function Summary() {
 		{
 			id: 121,
 			key: 'Tip',
-			value: `$${getState.pricing.tip}`,
+			value: `$${getState?.pricing?.tip}`,
 		},
 		{
 			id: 233,
 			key: 'Total',
-			value: `$${getState.pricing.subtotal}`,
+			value: `$${getState?.pricing?.subtotal}`,
 		},
 	]
 
+	useEffect(() => {
+		if (getState?.carts === undefined || getState?.carts.length < 1) {
+			navigate('/')
+		}
+	}, [getState])
+
 	const [card, setCard] = useState<number>(cards[0]?.id)
+
+	const submitOrder = () => {
+		const submitData = {
+			tableId: '',
+			userId: '',
+			restId: '',
+			menuItemId: getState.carts,
+			couponId: getState.couponId,
+			paymentIntentId: card,
+			meetupId: '',
+			tip: getState.pricing.tip,
+			startTime: 0,
+			readyTime: 0,
+			status: 'NewOrder',
+		}
+		usefetchpost(
+			'https://dynebackend.herokuapp.com/dev/api/order/create',
+			submitData,
+			'POST',
+			response => {
+				console.log(response)
+			}
+		)
+	}
 
 	return (
 		<Box sx={{ px: 1 }}>
@@ -233,6 +268,7 @@ function Summary() {
 						<Button
 							fullWidth
 							variant="contained"
+							onClick={submitOrder}
 							sx={{
 								px: 2,
 								py: 1.875,

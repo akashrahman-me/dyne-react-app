@@ -1,33 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import deleteIcon from '../../../images/Trash.png'
 import SuperInput from '../../global/SuperInput'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CartContext from '../../../contex/CartContext'
 import { useContext } from 'react'
 import Coupon from './Coupon'
 import type { LocalCart, Pricing } from '../../../utilities/types'
 import useFetch from '../../../hooks/useFetch'
+import CouponItem from './CouponItem'
 
-const tips = ['10%', '15%', '20%', '25%', '_$', '_%']
+const tips = [0, 10, 20, 25, 50, 75]
+let couponId = ''
 
 function Order() {
+	const navigate = useNavigate()
+	const [tipIndex, setTipIndex] = useState<any>(false)
+	const handleTip = (index: number) => setTipIndex(index)
+
 	const coupon = useFetch(
 		'https://dynebackend.herokuapp.com/dev/api/coupon/getAll?limit=5'
 	)
 
 	const [couponVisible, setCouponVisible] = useState<Boolean>(false)
 	const toggleCouponVisible = () => setCouponVisible((v: Boolean) => !v)
-	const [couponIndex, setCouponIndex] = useState<Boolean | number>(false)
+	const [couponIndex, setCouponIndex] = useState<any>(false)
 	const handleCouponIndex = (index: number) => {
 		setCouponIndex(index)
 	}
 
 	const getCarts = useContext(CartContext)
 	const [carts, setCarts] = React.useState<LocalCart[]>(getCarts.cart)
+
+	useEffect(() => {
+		if (getCarts.cart && getCarts.cart.length < 1) {
+			navigate('/')
+		}
+	}, carts)
+
 	const quantityHandle = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 		index: number
@@ -61,14 +74,28 @@ function Order() {
 		discount: 0.0,
 		tip: 0.0,
 		subtotal: total,
-		coupon: '-',
+		coupon: 0,
+	}
+
+	if (coupon?.result && coupon?.result !== null && couponIndex !== false) {
+		couponId = coupon?.result?.[couponIndex]?._id
+		const percentage = coupon?.result?.[couponIndex]?.dealInfo?.discountPercent
+		pricing.coupon = parseInt(percentage.toFixed(2))
+		pricing.discount = (total / 100) * percentage
+		pricing.subtotal = parseInt((total - pricing.discount).toFixed(2))
+	}
+
+	if (tipIndex !== false) {
+		pricing.tip = parseInt(((total / 100) * tips[tipIndex]).toFixed(2))
+
+		pricing.subtotal = parseInt((total + pricing.tip).toFixed(2))
 	}
 
 	const FooterText = [
 		{
 			id: 343948,
-			key: 'No coupon applied',
-			value: `${pricing.coupon ?? '-'}`,
+			key: 'Coupon applied',
+			value: `${pricing.coupon ?? '-'}%`,
 		},
 		{
 			id: 93948,
@@ -273,6 +300,16 @@ function Order() {
 							+
 						</Typography>
 					</Button>
+					<Box sx={{ mb: 3 }}>
+						{coupon?.result &&
+							coupon?.result !== null &&
+							couponIndex !== false && (
+								<CouponItem
+									item={coupon?.result?.[couponIndex]}
+									active
+								/>
+							)}
+					</Box>
 				</Box>
 				<Box sx={{ mt: 2 }}>
 					<Typography
@@ -294,19 +331,23 @@ function Order() {
 					>
 						{tips.map((v, i) => (
 							<SuperInput
+								onClick={() => handleTip(i)}
 								key={Math.random()}
-								defaultValue={v}
+								value={`${v}%`}
 								sx={{
 									borderRadius: 1,
 									width: 100 / tips.length + '%',
 									height: 36,
 									mx: 1,
-								}}
-								inputProps={{
-									sx: {
+									'& input': {
 										textAlign: 'center',
 										px: 0,
 									},
+									...(i === tipIndex && {
+										'& .MuiOutlinedInput-notchedOutline': {
+											border: `2px solid #d2042d`,
+										},
+									}),
 								}}
 							/>
 						))}
@@ -348,7 +389,7 @@ function Order() {
 				<Box sx={{ mt: 2 }}>
 					<Link
 						to="/summary"
-						state={{ carts, pricing }}
+						state={{ carts, pricing, couponId }}
 						style={{
 							textDecoration: 'none',
 							color: '#007AFF',

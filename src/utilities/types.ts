@@ -18,5 +18,5 @@ export interface Pricing {
 	discount: number
 	tip: number
 	subtotal: number
-	coupon: string
+	coupon: number
 }

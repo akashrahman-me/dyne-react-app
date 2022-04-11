@@ -7,7 +7,7 @@ import thumb from '../../../images/image 1.png'
 interface Props {
 	active: Boolean
 	item: any
-	onClick: () => void
+	onClick?: () => void
 }
 
 function CouponItem({ active, item, onClick }: Props) {

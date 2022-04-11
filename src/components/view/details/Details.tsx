@@ -3,12 +3,11 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import thumbnail from '../../../images/thumbnail-large.png'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import useFetch from '../../../hooks/useFetch'
 import type { Cart } from '../../../utilities/types'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import CartContext from '../../../contex/CartContext'
-import { useParams } from 'react-router-dom'
 
 function Details() {
 	const { handle, cart } = useContext(CartContext)
@@ -16,31 +15,20 @@ function Details() {
 
 	const navigate = useNavigate()
 	const id = params?.id
-	// const id = '60b36b79c3d5e02ae0d16b05'
-
 	const { result } = useFetch(
 		`https://dynebackend.herokuapp.com/dev/api/menuItem/${id}/byId`
 	)
+
+	useEffect(() => {
+		if (result !== null && result?.name === undefined) {
+			navigate('/')
+		}
+	}, result)
+
 	const handleOrder = () => {
 		handle(result)
 		setTimeout(navigate, 2000, '/')
 	}
-
-	// 	{
-	//   "subCategory": "",
-	//   "_id": "60b36b79c3d5e02ae0d16b05",
-	//   "restId": "60ade9ebce0a2dba97f16642",
-	//   "name": "Absinthe Bistro's Famous Noodles",
-	//   "category": "Food",
-	//   "description": "Delicious, you would ask for another plate.",
-	//   "imageUrl": "https://www.loveandoliveoil.com/wp-content/uploads/2015/03/soy-sauce-noodlesH2.jpg",
-	//   "prices": [
-	//     {
-	//       "price": 12,
-	//       "optionalTitle": "Small"
-	//     }
-	//   ]
-	// }
 
 	return (
 		<Box>
@@ -55,7 +43,6 @@ function Details() {
 					textAlign="center"
 				>
 					{result?.name}
-					Beef dumpling in hot and sour soup
 				</Typography>
 				<Avatar
 					variant="square"
