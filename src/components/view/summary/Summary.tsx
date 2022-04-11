@@ -98,7 +98,7 @@ function Summary() {
 	}
 
 	return (
-		<Box sx={{ px: 1 }}>
+		<Box>
 			<Box>
 				<Typography
 					component="h2"

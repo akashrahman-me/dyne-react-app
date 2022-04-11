@@ -44,137 +44,6 @@ const tabs = [
 	},
 ]
 
-const productCategory1: ItemsDateline = [
-	{
-		id: 398493,
-		image: thumbnail,
-		title: 'Beef dumpling in hot and sour soup',
-		price: 42.99,
-	},
-	{
-		id: 845984,
-		image: thumbnail,
-		title: 'Beef dumpling in hot and sour soup',
-		price: 42.99,
-	},
-	{
-		id: 584575,
-		image: thumbnail,
-		title: 'Beef dumpling in hot and sour soup',
-		price: 42.99,
-	},
-	{
-		id: 125142,
-		image: thumbnail,
-		title: 'Beef dumpling in hot and sour soup',
-		price: 42.99,
-	},
-]
-const productCategory2: ItemsDateline = [
-	{
-		id: 598834,
-		image: thumbnail,
-		title: 'Spicy ramen with poached egg',
-		price: 42.99,
-	},
-	{
-		id: 43032940394,
-		image: thumbnail,
-		title: 'Spicy ramen with poached egg',
-		price: 42.99,
-	},
-	{
-		id: 49384,
-		image: thumbnail,
-		title: 'Spicy ramen with poached egg',
-		price: 42.99,
-	},
-	{
-		id: 23948394,
-		image: thumbnail,
-		title: 'Spicy ramen with poached egg',
-		price: 42.99,
-	},
-]
-const productCategory3: ItemsDateline = [
-	{
-		id: 2198378829,
-		image: thumbnail,
-		title: 'Shrimp noodles with spicy seafood',
-		price: 42.99,
-	},
-	{
-		id: 934903433,
-		image: thumbnail,
-		title: 'Shrimp noodles with spicy seafood',
-		price: 42.99,
-	},
-	{
-		id: 454985439,
-		image: thumbnail,
-		title: 'Shrimp noodles with spicy seafood',
-		price: 42.99,
-	},
-	{
-		id: 32403249,
-		image: thumbnail,
-		title: 'Shrimp noodles with spicy seafood',
-		price: 42.99,
-	},
-]
-const productCategory4: ItemsDateline = [
-	{
-		id: 242938423,
-		image: thumbnail,
-		title: 'Mushroom cream sauce pasta',
-		price: 42.99,
-	},
-	{
-		id: 234902394,
-		image: thumbnail,
-		title: 'Mushroom cream sauce pasta',
-		price: 42.99,
-	},
-	{
-		id: 2493784,
-		image: thumbnail,
-		title: 'Mushroom cream sauce pasta',
-		price: 42.99,
-	},
-	{
-		id: 23498324,
-		image: thumbnail,
-		title: 'Mushroom cream sauce pasta',
-		price: 42.99,
-	},
-]
-const productCategory5: ItemsDateline = [
-	{
-		id: 43248324,
-		image: thumbnail,
-		title: 'Fried rice with egg and vegetables',
-		price: 42.99,
-	},
-	{
-		id: 2934234,
-		image: thumbnail,
-		title: 'Fried rice with egg and vegetables',
-		price: 42.99,
-	},
-	{
-		id: 234234234,
-		image: thumbnail,
-		title: 'Fried rice with egg and vegetables',
-		price: 42.99,
-	},
-	{
-		id: 654654656,
-		image: thumbnail,
-		title: 'Fried rice with egg and vegetables',
-		price: 42.99,
-	},
-]
-
 function App() {
 	const [value, setValue] = useState(0)
 	const [sort, setSort] = useState('')
@@ -190,7 +59,7 @@ function App() {
 	}
 
 	return (
-		<Box sx={{ px: 1 }}>
+		<Box>
 			<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 				<Tabs
 					value={value}

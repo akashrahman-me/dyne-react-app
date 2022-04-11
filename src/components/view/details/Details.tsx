@@ -32,7 +32,7 @@ function Details() {
 
 	return (
 		<Box>
-			<Box sx={{ px: 1 }}>
+			<Box>
 				<Typography
 					component="h1"
 					variant="h6"

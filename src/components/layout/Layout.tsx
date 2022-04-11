@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import CartContext from '../../contex/CartContext'
+import Box from '@mui/material/Box'
 import { useState } from 'react'
 import type { Cart, LocalCart } from '../../utilities/types'
 
@@ -32,7 +33,9 @@ function Layout() {
 
 	return (
 		<CartContext.Provider value={{ cart, handle: handleCart }}>
-			<Outlet />
+			<Box sx={{ px: 1 }}>
+				<Outlet />
+			</Box>
 		</CartContext.Provider>
 	)
 }

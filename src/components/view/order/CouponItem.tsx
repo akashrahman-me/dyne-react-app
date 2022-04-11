@@ -2,7 +2,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import dolar from '../../../images/dolar.svg'
 import time from '../../../images/Time.svg'
-import thumb from '../../../images/image 1.png'
 
 interface Props {
 	active: Boolean

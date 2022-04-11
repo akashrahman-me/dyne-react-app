@@ -60,6 +60,9 @@ function Order() {
 			setCarts(pv => {
 				let carts = [...pv]
 				carts.splice(index, 1)
+				if (carts.length <= 0) {
+					window.location.href = '/'
+				}
 				return carts
 			})
 		}
@@ -115,7 +118,7 @@ function Order() {
 	]
 
 	return (
-		<Box sx={{ px: 1 }}>
+		<Box>
 			<Coupon
 				visible={couponVisible}
 				toggleCouponVisible={toggleCouponVisible}
